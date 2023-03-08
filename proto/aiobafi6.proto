@@ -35,6 +35,35 @@ enum OffOnAuto {
   AUTO = 2;
 }
 
+enum MultiLightMode {
+  ALL_LIGHTS = 0;
+  DOWNLIGHT = 1;
+  UPLIGHT = 2;
+}
+
+message RgbLed {
+  enum Preset
+  {
+    CUSTO  = 0;
+    RED = 1;
+    GREEN = 2;
+    BLUE = 3;
+    TEAL = 4;
+    YELLOW = 5;
+    VIOLET = 6;
+    WHITE = 7;
+    ORANGE = 8;
+    PINK = 9;
+  }
+
+    optional Preset preset = 1;
+    optional bool enabled = 2;
+    optional uint32 brightness_percent = 3;
+    optional uint32 red = 4;
+    optional uint32 green = 5;
+    optional uint32 blue = 6;
+}
+
 message Properties {
   // General
   optional string name = 1;
@@ -79,9 +108,7 @@ message Properties {
   optional int32 target_rpm = 63;
   optional int32 current_rpm = 64;
 
-  // Resets after about 4 minutes 30 seconds.
-  // Speculatively placed in the fan category as it is returned with other
-  // fan properties by the firmware. Arguably could be named "fast occupancy".
+  // Set on occupancy.  Reset after motion_sense_timeout.
   optional bool fan_occupancy_detected = 66; // `api_version` >= 5
 
   // Light
@@ -100,10 +127,11 @@ message Properties {
   optional int32 light_warmest_color_temperature = 78;
   optional int32 light_coolest_color_temperature = 79;
 
-  // Resets after about 9 minutes 30 seconds.
-  // Speculatively placed in the light category as it is returned with other
-  // light properties by the firmware. Arguably could be named "slow occupancy".
-  // And given its field ID, it's odd that it's not in the sensor category.
+  // Change this mode to change which light above settings are applied to
+  optional MultiLightMode light_multilight_mode = 82;
+  optional RgbLed light_rgb_led = 83;
+
+  // Set on occupancy.  Reset after light_auto_motion_timeout.
   optional bool light_occupancy_detected = 85; // `api_version` >= 5
 
   // Sensors
@@ -125,6 +153,8 @@ message Properties {
 
   // Speculatively called stats because it contains uptime.
   optional Stats stats = 156;
+
+  optional bool uvcOn = 172; 
 }
 
 message FirmwareProperties {
@@ -134,9 +164,15 @@ message FirmwareProperties {
 }
 
 message Capabilities {
-  optional bool has_comfort1 = 1;
-  optional bool has_comfort3 = 3;
+  optional bool has_temp = 1;
+  optional bool has_humidity = 2;
+  optional bool has_occupancy = 3;
   optional bool has_light = 4;
+  optional bool has_light_temp = 6;
+  optional bool has_fan = 7;
+  optional bool has_uplight = 11;
+  optional bool has_uvc = 12;
+  optional bool has_rgb = 13;
 }
 
 message WifiProperties { optional string ssid = 1; }

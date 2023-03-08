@@ -489,8 +489,8 @@ class Device:
     @property
     def has_auto_comfort(self) -> bool:  # pylint: disable=missing-function-docstring
         # https://github.com/home-assistant/core/issues/72934
-        hc1 = maybe_proto_field(self._properties.capabilities, "has_comfort1") or False
-        hc3 = maybe_proto_field(self._properties.capabilities, "has_comfort3") or False
+        hc1 = maybe_proto_field(self._properties.capabilities, "has_temp") or False
+        hc3 = maybe_proto_field(self._properties.capabilities, "has_occupancy") or False
         return hc1 and hc3
 
     @property

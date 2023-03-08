@@ -38,25 +38,25 @@ async def test_has_auto_comfort():
     d = Device(Service(("127.0.0.1",), PORT))
     assert not d.has_auto_comfort
 
-    d._properties.capabilities.has_comfort1 = False
+    d._properties.capabilities.has_temp = False
     assert not d.has_auto_comfort
 
-    d._properties.capabilities.ClearField("has_comfort1")
-    d._properties.capabilities.has_comfort3 = False
+    d._properties.capabilities.ClearField("has_temp")
+    d._properties.capabilities.has_occupancy = False
     assert not d.has_auto_comfort
 
-    d._properties.capabilities.has_comfort1 = False
-    d._properties.capabilities.has_comfort3 = False
+    d._properties.capabilities.has_temp = False
+    d._properties.capabilities.has_occupancy = False
     assert not d.has_auto_comfort
 
-    d._properties.capabilities.ClearField("has_comfort3")
-    d._properties.capabilities.has_comfort1 = True
+    d._properties.capabilities.ClearField("has_occupancy")
+    d._properties.capabilities.has_temp = True
     assert not d.has_auto_comfort
 
-    d._properties.capabilities.ClearField("has_comfort1")
-    d._properties.capabilities.has_comfort3 = True
+    d._properties.capabilities.ClearField("has_temp")
+    d._properties.capabilities.has_occupancy = True
     assert not d.has_auto_comfort
 
-    d._properties.capabilities.has_comfort1 = True
-    d._properties.capabilities.has_comfort3 = True
+    d._properties.capabilities.has_temp = True
+    d._properties.capabilities.has_occupancy = True
     assert d.has_auto_comfort
